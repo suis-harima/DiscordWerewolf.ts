@@ -83,6 +83,7 @@ export const LangTypeFormat = obj({
         room_LivingVoice : str,
         room_Dead        : str,
         room_DeadVoice   : str,
+        room_WolfVoice   : str,
     }),
 
     sys
