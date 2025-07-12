@@ -633,7 +633,7 @@ export default class GameState {
                         addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
-                        addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
@@ -664,7 +664,7 @@ export default class GameState {
                             addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
-                            addPerm(uid, Perm.ReadOnly, permWerewolfVoice); // SuiS added
+                            addPerm(uid, Perm.ViewOnly, permWerewolfVoice); // SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
@@ -703,7 +703,7 @@ export default class GameState {
                             addPerm(uid, Perm.ReadOnly, permWerewolfVoice);// SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
-                            addPerm(uid, Perm.ReadOnly, permWerewolfVoice);// SuiS added
+                            addPerm(uid, Perm.ViewOnly, permWerewolfVoice);// SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
@@ -748,7 +748,7 @@ export default class GameState {
             case Phase.p7_GameEnd:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.ReadOnly, permWerewolf   );
-                addPerm(this.guild.id, Perm.ReadOnly, permWerewolfVoice   );
+                addPerm(this.guild.id, Perm.ViewOnly, permWerewolfVoice   );
                 addPerm(this.guild.id, Perm.RW,       permLiving     );
                 addPerm(this.guild.id, Perm.RW,       permLivingVoice);
                 addPerm(this.guild.id, Perm.ReadOnly, permDead       );

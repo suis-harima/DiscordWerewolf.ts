@@ -12,7 +12,7 @@
     confirmation_sec  : 30,
 
     wish_role_rand_weight : 3,
-    wish_role_time        : 30,
+    wish_role_time        : 0,
 
     first_night : {
         first_night_time : 60,
