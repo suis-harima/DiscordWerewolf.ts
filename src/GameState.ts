@@ -722,9 +722,9 @@ export default class GameState {
                 for(const uid in this.members) {
                     if(this.members[uid].isLiving) {
                         addPerm(uid, Perm.ReadOnly, permLiving);
-                        addPerm(uid, Perm.ReadOnly, permLivingVoice);
+                        addPerm(uid, Perm.ViewOnly, permLivingVoice);
                         addPerm(uid, Perm.NoAccess, permDead       );
-                        addPerm(uid, Perm.ViewOnly, permDeadVoice  );
+                        addPerm(uid, Perm.NoAccess, permDeadVoice  );
                     } else {
                         addPerm(uid, Perm.ReadOnly, permLiving);
                         addPerm(uid, Perm.ReadOnly, permLivingVoice);
