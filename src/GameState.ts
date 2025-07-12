@@ -580,6 +580,7 @@ export default class GameState {
         let permDead        : Discord.OverwriteResolvable[] = [];
         let permDeadVoice   : Discord.OverwriteResolvable[] = [];
         let permWerewolf    : Discord.OverwriteResolvable[] = [];
+        let permWerewolfVoice    : Discord.OverwriteResolvable[] = []; // SuiS added
 
         switch (this.phase) {
             case Phase.p0_UnStarted:
@@ -590,10 +591,12 @@ export default class GameState {
                 addPerm(this.guild.id, Perm.ReadOnly, permDead       );
                 addPerm(this.guild.id, Perm.RW,       permDeadVoice  );
                 addPerm(this.guild.id, Perm.ViewOnly, permWerewolf   );
+                addPerm(this.guild.id, Perm.ViewOnly, permWerewolfVoice   ); // SuiS added
                 break;
             case Phase.p2_Preparation:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -605,14 +608,17 @@ export default class GameState {
                     addPerm(uid, Perm.ViewOnly, permDeadVoice  );
                     if(this.members[uid].allowWolfRoom){
                         addPerm(uid, Perm.ReadOnly, permWerewolf);
+                        addPerm(uid, Perm.ReadOnly, permWerewolfVoice); // SuiS added
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
             case Phase.p3_FirstNight:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -624,14 +630,17 @@ export default class GameState {
                     addPerm(uid, Perm.ViewOnly, permDeadVoice  );
                     if(this.members[uid].allowWolfRoom){
                         addPerm(uid, Perm.RW,       permWerewolf);
+                        addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
             case Phase.p4_Daytime:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -652,17 +661,21 @@ export default class GameState {
                         const enableDaytimeWolfRoom = false;
                         if(enableDaytimeWolfRoom && this.members[uid].isLiving) {
                             addPerm(uid, Perm.RW,       permWerewolf);
+                            addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.ReadOnly, permWerewolfVoice); // SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
             case Phase.p5_Vote:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -687,17 +700,21 @@ export default class GameState {
                     if(this.members[uid].allowWolfRoom){
                         if(this.members[uid].isLiving) {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.ReadOnly, permWerewolfVoice);// SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.ReadOnly, permWerewolfVoice);// SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice);// SuiS added
                     }
                 }
                 break;
             case Phase.p6_Night:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -717,17 +734,21 @@ export default class GameState {
                     if(this.members[uid].allowWolfRoom){
                         if(this.members[uid].isLiving) {
                             addPerm(uid, Perm.RW,       permWerewolf);
+                            addPerm(uid, Perm.RW,       permWerewolfVoice);  // SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.NoAccess, permWerewolfVoice);  // SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolf);  // SuiS added
                     }
                 }
                 break;
             case Phase.p7_GameEnd:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.ReadOnly, permWerewolf   );
+                addPerm(this.guild.id, Perm.ReadOnly, permWerewolfVoice   );
                 addPerm(this.guild.id, Perm.RW,       permLiving     );
                 addPerm(this.guild.id, Perm.RW,       permLivingVoice);
                 addPerm(this.guild.id, Perm.ReadOnly, permDead       );
@@ -742,13 +763,17 @@ export default class GameState {
             addPerm(this.guild.me.id, Perm.Admin, permDead       );
             addPerm(this.guild.me.id, Perm.Admin, permDeadVoice  );
             addPerm(this.guild.me.id, Perm.Admin, permWerewolf   );
+            addPerm(this.guild.me.id, Perm.Admin, permWerewolfVoice   );
         }
         this.channels.Living     .permissionOverwrites.set(permLiving     );
         this.channels.LivingVoice.permissionOverwrites.set(permLivingVoice);
         this.channels.Dead       .permissionOverwrites.set(permDead       );
         this.channels.DeadVoice  .permissionOverwrites.set(permDeadVoice  );
         this.channels.Werewolf   .permissionOverwrites.set(permWerewolf   );
+        this.channels.Werewolf   .permissionOverwrites.set(permWerewolfVoice   );
 
+
+        // TO DO SUIS Wolf mute ?
         const LiveID = this.channels.LivingVoice.id;
         const DeadID = this.channels.DeadVoice.id;
         for(const uid in this.members) {

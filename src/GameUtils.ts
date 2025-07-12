@@ -12,6 +12,7 @@ export class GameChannels {
     LivingVoice : Discord.VoiceChannel;
     Dead        : Discord.TextChannel;
     DeadVoice   : Discord.VoiceChannel;
+    WolfVoice   : Discord.VoiceChannel;
     constructor(
         aWerewolf    : Discord.TextChannel,
         aGameLog     : Discord.TextChannel,
@@ -19,7 +20,8 @@ export class GameChannels {
         aLiving      : Discord.TextChannel,
         aLivingVoice : Discord.VoiceChannel,
         aDead        : Discord.TextChannel,
-        aDeadVoice   : Discord.VoiceChannel
+        aDeadVoice   : Discord.VoiceChannel,
+        aWolfVoice   : Discord.VoiceChannel
     ) {
         this.Werewolf     = aWerewolf;
         this.GameLog      = aGameLog;
@@ -28,6 +30,7 @@ export class GameChannels {
         this.LivingVoice  = aLivingVoice;
         this.Dead         = aDead;
         this.DeadVoice    = aDeadVoice;
+        this.WolfVoice    = aWolfVoice;
     }
 }
 
