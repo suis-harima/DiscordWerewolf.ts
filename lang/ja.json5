@@ -7,6 +7,7 @@
         room_LivingVoice : "生存者",
         room_Dead        : "霊界チャット",
         room_DeadVoice   : "霊界"
+        room_WolfVoice   : "人狼"
     },
     sys : {
         cmd_make_room     : ["make_room"],
