@@ -770,7 +770,7 @@ export default class GameState {
         this.channels.Dead       .permissionOverwrites.set(permDead       );
         this.channels.DeadVoice  .permissionOverwrites.set(permDeadVoice  );
         this.channels.Werewolf   .permissionOverwrites.set(permWerewolf   );
-        this.channels.Werewolf   .permissionOverwrites.set(permWerewolfVoice   );
+        this.channels.WolfVoice  .permissionOverwrites.set(permWerewolfVoice   );
 
 
         // TO DO SUIS Wolf mute ?
