@@ -625,7 +625,7 @@ export default class GameState {
                 addPerm(this.guild.id, Perm.ViewOnly, permDeadVoice  );
                 for(const uid in this.members) {
                     addPerm(uid, Perm.ReadOnly, permLiving);
-                    addPerm(uid, Perm.ReadOnly, permLivingVoice);
+                    addPerm(uid, Perm.NoAccess, permLivingVoice);
                     addPerm(uid, Perm.NoAccess, permDead       );
                     addPerm(uid, Perm.ViewOnly, permDeadVoice  );
                     if(this.members[uid].allowWolfRoom){
@@ -722,12 +722,12 @@ export default class GameState {
                 for(const uid in this.members) {
                     if(this.members[uid].isLiving) {
                         addPerm(uid, Perm.ReadOnly, permLiving);
-                        addPerm(uid, Perm.ViewOnly, permLivingVoice);
+                        addPerm(uid, Perm.NoAccess, permLivingVoice);
                         addPerm(uid, Perm.NoAccess, permDead       );
                         addPerm(uid, Perm.NoAccess, permDeadVoice  );
                     } else {
                         addPerm(uid, Perm.ReadOnly, permLiving);
-                        addPerm(uid, Perm.ReadOnly, permLivingVoice);
+                        addPerm(uid, Perm.NoAccess, permLivingVoice);
                         addPerm(uid, Perm.RW,       permDead       );
                         addPerm(uid, Perm.RW,       permDeadVoice  );
                     }
