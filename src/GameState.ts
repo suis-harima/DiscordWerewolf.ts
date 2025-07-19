@@ -620,7 +620,7 @@ export default class GameState {
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
-                addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
+                addPerm(this.guild.id, Perm.NoAccess, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
                 addPerm(this.guild.id, Perm.ViewOnly, permDeadVoice  );
                 for(const uid in this.members) {
@@ -716,7 +716,7 @@ export default class GameState {
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
-                addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
+                addPerm(this.guild.id, Perm.NoAccess, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
                 addPerm(this.guild.id, Perm.ViewOnly, permDeadVoice  );
                 for(const uid in this.members) {
