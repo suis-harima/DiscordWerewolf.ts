@@ -793,6 +793,7 @@ export default class GameState {
                     if(this.members[uid].allowWolfRoom){
                         if(this.members[uid].isLiving) {
                             m.voice.setChannel(WolfID); // これで切断
+                            m.voice.setMute(false);
                         } else {
                             m.voice.setChannel(null); // これで切断
                         }
