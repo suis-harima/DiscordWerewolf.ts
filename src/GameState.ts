@@ -776,6 +776,7 @@ export default class GameState {
         // TO DO SUIS Wolf mute ?
         const LiveID = this.channels.LivingVoice.id;
         const DeadID = this.channels.DeadVoice.id;
+        const WolfID = this.channels.WolfVoice.id;
         // 以下の処理でlivingとdeadのボイスチャンネルの移動とミュートを制御
         /////   SuiS added  //////
         if(this.phase == Phase.p6_Night || this.phase == Phase.p3_FirstNight ){ //SuiS added
@@ -789,7 +790,15 @@ export default class GameState {
                     }
                     if(cu1 != null && m.id == cu1.id) return;
                     if(cu2 != null && m.id == cu2.id) return;
-                    m.voice.setChannel(null); // これで切断
+                    if(this.members[uid].allowWolfRoom){
+                        if(this.members[uid].isLiving) {
+                            m.voice.setChannel(WolfID); // これで切断
+                        } else {
+                            m.voice.setChannel(null); // これで切断
+                        }
+                    } else {
+                        m.voice.setChannel(null); // これで切断
+                    }
                 })
             }
         } 
