@@ -790,17 +790,19 @@ export default class GameState {
                     }
                     if(cu1 != null && m.id == cu1.id) return;
                     if(cu2 != null && m.id == cu2.id) return;
-                    if(this.members[uid].allowWolfRoom){
-                        if(this.members[uid].isLiving) {
-                            m.voice.setChannel(WolfID); // これで切断
-                            m.voice.setMute(false);
+                    if(m.voice.channel.id == LiveID){
+                        if(this.members[uid].allowWolfRoom){
+                            if(this.members[uid].isLiving) {
+                                m.voice.setChannel(WolfID); // これで切断
+                                m.voice.setMute(false);
+                            } else {
+                                m.voice.setMute(false);
+                                m.voice.setChannel(null); // これで切断
+                            }
                         } else {
                             m.voice.setMute(false);
                             m.voice.setChannel(null); // これで切断
                         }
-                    } else {
-                        m.voice.setMute(false);
-                        m.voice.setChannel(null); // これで切断
                     }
                 })
             }
