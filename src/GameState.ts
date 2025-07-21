@@ -795,9 +795,11 @@ export default class GameState {
                             m.voice.setChannel(WolfID); // これで切断
                             m.voice.setMute(false);
                         } else {
+                            m.voice.setMute(false);
                             m.voice.setChannel(null); // これで切断
                         }
                     } else {
+                        m.voice.setMute(false);
                         m.voice.setChannel(null); // これで切断
                     }
                 })
