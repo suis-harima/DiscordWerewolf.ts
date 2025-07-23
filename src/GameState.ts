@@ -37,7 +37,8 @@ type Role = keyof typeof RolesStr.tsType;
 const TeamNames = stringToEnum([
     'Good',
     'Evil',
-    'Other'
+    'Other',
+    'Kyubi'
 ]);
 type TeamNames = keyof typeof TeamNames;
 
@@ -50,13 +51,14 @@ function getDefaultTeams(r : Role){
         case Role.Mason:
         case Role.Dictator:
         case Role.Baker:
-        case Role.Kyubi: // SuiS added
             return TeamNames.Good;
         case Role.Werewolf:
         case Role.Traitor:
         case Role.Communicatable:
         case Role.Fanatic:
             return TeamNames.Evil;
+        case Role.Kyubi: // SuiS added
+            return TeamNames.Kyubi;
         default:
             assertUnreachable(r);
     }
@@ -227,6 +229,7 @@ export enum KickReason {
     Vote,
     Werewolf,
     Living,
+    Kyubi,
 }
 
 
@@ -489,6 +492,11 @@ export default class GameState {
             name : this.langTxt.team_name.Other + "  " +
             format(this.langTxt.sys.Current_role_breakdown_sum, {num : team_cnt[TeamNames.Other]}),
             value: team[TeamNames.Other], inline : true});
+        }
+        if(team[TeamNames.Kyubi] != "") { fields.push({
+            name : this.langTxt.team_name.Kyubi + "  " +
+            format(this.langTxt.sys.Current_role_breakdown_sum, {num : team_cnt[TeamNames.Kyubi]}),
+            value: team[TeamNames.Kyubi], inline : true});
         }
         fields.push({
             name : this.langTxt.rule.title,
@@ -945,8 +953,17 @@ export default class GameState {
                         {name : LangFP.log,    value : actionLog, inline : true}]
                 }]});
             }
+
+            // 妖狐が占われていた場合妖狐が死ぬ処理
+            if (this.members[uid].role == Role.Seer && tRole == Role.Kyubi) {
+                // 妖狐に占われたことと死んだことをチャット
+                
+                // 妖狐をDeadへ
+                this.kickMember(tid, KickReason.Kyubi).then();;
+            }
         }
     }
+
     getTimeFormatFromSec(t : number){
         const m = Math.floor(t / 60);
         const s = Math.floor(t - m * 60);
@@ -973,12 +990,17 @@ export default class GameState {
 
         let goodNum = 0;
         let evilNum = 0;
+        let isAliveKyubi = false;
 
         this.members[uid].deadReason = reason;
         if(reason == KickReason.Vote){
             this.httpGameState.updateMemberDead(uid);
         }
         if(reason == KickReason.Werewolf){
+            this.httpGameState.updateMemberKill(uid);
+        }
+        // 妖狐のkickを追加
+        if(reason == KickReason.Kyubi){
             this.httpGameState.updateMemberKill(uid);
         }
         for(let id in this.members){
@@ -990,13 +1012,24 @@ export default class GameState {
             } else {
                 goodNum += 1;
             }
+            if(r == Role.Kyubi) {
+                isAliveKyubi = true;
+            }
         }
-        if(goodNum <= evilNum){
-            this.gameEnd(TeamNames.Evil);
+        if(goodNum <= evilNum ){
+            if ( isAliveKyubi ) {
+                this.gameEnd(TeamNames.Kyubi);
+            } else {
+                this.gameEnd(TeamNames.Evil);
+            }
             return;
         }
         if(evilNum == 0){
-            this.gameEnd(TeamNames.Good);
+            if ( isAliveKyubi ) {
+                this.gameEnd(TeamNames.Kyubi);
+            } else {
+                this.gameEnd(TeamNames.Good);
+            }
             return;
         }
 
@@ -2442,9 +2475,12 @@ export default class GameState {
 
         this.wolfLog.push(this.wolfVote);
         if(Guarded.find(id => id == this.wolfVote) == null){
-            this.killNext.push([this.wolfVote, 0]);
-            await this.kickMember(this.wolfVote, KickReason.Werewolf);
-            if(this.phase != Phase.p6_Night) return;
+            // Kyubiの場合を除く SuiS added
+            if (this.members[this.wolfVote].role != Role.Kyubi){
+                this.killNext.push([this.wolfVote, 0]);
+                await this.kickMember(this.wolfVote, KickReason.Werewolf);
+                if(this.phase != Phase.p6_Night) return;
+            }
         }
         await this.startP4_Daytime();
     }
