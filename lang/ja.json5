@@ -127,8 +127,8 @@
         Dictator  : "独裁者",
         Baker     : "パン屋",
         Communicatable : "ささやく狂人",
-        Fanatic : "狂信者"
-        Kyubi : "妖狐"
+        Fanatic : "狂信者",
+        Kyubi : "妖狐",
     },
     emo : {
         Villager  : ":man:",
@@ -141,8 +141,8 @@
         Dictator  : ":triumph:",
         Baker     : ":bread:",
         Communicatable : ":genie:",
-        Fanatic : ":vampire:"
-        Kyubi : ":fox:"
+        Fanatic : ":vampire:",
+        Kyubi : ":fox:",
     },
     // https://twemoji.maxcdn.com/2/test/preview.html
     role_img : {
@@ -192,8 +192,8 @@
     team_name : {
         Good  : "村人陣営",
         Evil  : "人狼陣営",
-        Other : "その他陣営"
-        Kyubi : "妖狐陣営"
+        Other : "その他陣営",
+        Kyubi : "妖狐陣営",
     },
     team_emo : {
         Good  : ":man:",
