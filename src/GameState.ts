@@ -29,6 +29,7 @@ const Role = stringToEnum([
     'Baker',
     'Communicatable',
     'Fanatic',
+    'Kyubi', // SuiS added
 ]);
 type Role = keyof typeof RolesStr.tsType;
 
@@ -49,6 +50,7 @@ function getDefaultTeams(r : Role){
         case Role.Mason:
         case Role.Dictator:
         case Role.Baker:
+        case Role.Kyubi: // SuiS added
             return TeamNames.Good;
         case Role.Werewolf:
         case Role.Traitor:
@@ -71,6 +73,7 @@ function whatTeamFortuneResult(r : Role){
         case Role.Traitor:
         case Role.Communicatable:
         case Role.Fanatic:
+        case Role.Kyubi: // SuiS added
             return TeamNames.Good;
         case Role.Werewolf:
             return TeamNames.Evil;
@@ -435,6 +438,8 @@ export default class GameState {
             if(s[i] == 'T') this.addRole(Role.Traitor);
             if(s[i] == 'C') this.addRole(Role.Communicatable);
             if(s[i] == 'F') this.addRole(Role.Fanatic);
+
+            if(s[i] == '9') this.addRole(Role.Kyubi); // SuiS added
         }
         console.log(this.defaultRoles);
         this.sendWantNums(this.channels.Living);
