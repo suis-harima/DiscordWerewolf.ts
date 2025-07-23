@@ -175,6 +175,7 @@ function has_room_all_game_channel_support_v(
 function has_room_all_game_channel(catId : string, channels : Discord.GuildChannelManager, SrvLangTxt : LangType) : GameChannels | null{
     const aLivingVoice = has_room_all_game_channel_support_v(catId, SrvLangTxt['game']["room_LivingVoice"], channels); if(aLivingVoice == null) return null;
     const aDeadVoice   = has_room_all_game_channel_support_v(catId, SrvLangTxt['game']["room_DeadVoice"]  , channels); if(aDeadVoice   == null) return null;
+    const aWolfVoice   = has_room_all_game_channel_support_v(catId, SrvLangTxt['game']["room_WolfVoice"]  , channels); if(aWolfVoice   == null) return null; // SuiS added
     const aWerewolf    = has_room_all_game_channel_support_t(catId, SrvLangTxt['game']["room_Werewolf"]   , channels); if(aWerewolf    == null) return null;
     const aGameLog     = has_room_all_game_channel_support_t(catId, SrvLangTxt['game']["room_GameLog"]    , channels); if(aGameLog     == null) return null;
     const aDebugLog    = has_room_all_game_channel_support_t(catId, SrvLangTxt['game']["room_DebugLog"]   , channels); if(aDebugLog    == null) return null;
@@ -187,7 +188,8 @@ function has_room_all_game_channel(catId : string, channels : Discord.GuildChann
         aLiving     ,
         aLivingVoice,
         aDead       ,
-        aDeadVoice
+        aDeadVoice  ,
+        aWolfVoice  // SuiS added
     );
 }
 
@@ -199,6 +201,7 @@ function getGameChannels2(ch : GameChannels, gch : Discord.GuildChannelManager) 
     let aLivingVoice : Discord.VoiceChannel | null = null;
     let aDead        : Discord.TextChannel  | null = null;
     let aDeadVoice   : Discord.VoiceChannel | null = null;
+    let aWolfVoice   : Discord.VoiceChannel | null = null; // SuiS added
     gch.cache.forEach(function (c, key) {
         if(ch.Werewolf   .id == c.id && ((c): c is Discord.TextChannel => c.type === 'GUILD_TEXT')(c)) aWerewolf    = c;
         if(ch.GameLog    .id == c.id && ((c): c is Discord.TextChannel => c.type === 'GUILD_TEXT')(c)) aGameLog     = c;
@@ -207,6 +210,7 @@ function getGameChannels2(ch : GameChannels, gch : Discord.GuildChannelManager) 
         if(ch.LivingVoice.id == c.id && ((c): c is Discord.VoiceChannel=> c.type === 'GUILD_VOICE')(c))aLivingVoice = c;
         if(ch.Dead       .id == c.id && ((c): c is Discord.TextChannel => c.type === 'GUILD_TEXT')(c)) aDead        = c;
         if(ch.DeadVoice  .id == c.id && ((c): c is Discord.VoiceChannel=> c.type === 'GUILD_VOICE')(c))aDeadVoice   = c;
+        if(ch.WolfVoice  .id == c.id && ((c): c is Discord.VoiceChannel=> c.type === 'GUILD_VOICE')(c))aWolfVoice   = c; // SuiS added
     });
     if(aWerewolf   == null) return null;
     if(aGameLog    == null) return null;
@@ -215,6 +219,7 @@ function getGameChannels2(ch : GameChannels, gch : Discord.GuildChannelManager) 
     if(aLivingVoice== null) return null;
     if(aDead       == null) return null;
     if(aDeadVoice  == null) return null;
+    if(aWolfVoice  == null) return null; // SuiS added
     return new GameChannels(
         aWerewolf   ,
         aGameLog    ,
@@ -222,7 +227,8 @@ function getGameChannels2(ch : GameChannels, gch : Discord.GuildChannelManager) 
         aLiving     ,
         aLivingVoice,
         aDead       ,
-        aDeadVoice
+        aDeadVoice  ,
+        aWolfVoice // SuiS added
     );
 }
 
@@ -241,6 +247,7 @@ async function make_room(message : Discord.Message, SrvLangTxt : LangType){
     let LivingVoice : Discord.VoiceChannel | null = null;
     let Dead        : Discord.TextChannel  | null = null;
     let DeadVoice   : Discord.VoiceChannel | null = null;
+    let WolfVoice   : Discord.VoiceChannel | null = null; // SuiS added 
 
     const cat = await guild.channels.create(category_name,{type : 'GUILD_CATEGORY'});
     Werewolf    = await guild.channels.create(SrvLangTxt.game.room_Werewolf   , {type : 'GUILD_TEXT',  parent : cat.id, position : 2});
@@ -250,6 +257,7 @@ async function make_room(message : Discord.Message, SrvLangTxt : LangType){
     LivingVoice = await guild.channels.create(SrvLangTxt.game.room_LivingVoice, {type : 'GUILD_VOICE', parent : cat.id, position : 6});
     Dead        = await guild.channels.create(SrvLangTxt.game.room_Dead       , {type : 'GUILD_TEXT',  parent : cat.id, position : 7});
     DeadVoice   = await guild.channels.create(SrvLangTxt.game.room_DeadVoice  , {type : 'GUILD_VOICE', parent : cat.id, position : 8});
+    WolfVoice   = await guild.channels.create(SrvLangTxt.game.room_WolfVoice  , {type : 'GUILD_VOICE', parent : cat.id, position : 9}); // SuiS added 
     return new GameChannels(
         Werewolf   ,
         GameLog    ,
@@ -257,7 +265,8 @@ async function make_room(message : Discord.Message, SrvLangTxt : LangType){
         Living     ,
         LivingVoice,
         Dead       ,
-        DeadVoice
+        DeadVoice  ,
+        WolfVoice
     );
 }
 

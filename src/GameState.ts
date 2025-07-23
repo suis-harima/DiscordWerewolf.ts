@@ -580,6 +580,7 @@ export default class GameState {
         let permDead        : Discord.OverwriteResolvable[] = [];
         let permDeadVoice   : Discord.OverwriteResolvable[] = [];
         let permWerewolf    : Discord.OverwriteResolvable[] = [];
+        let permWerewolfVoice    : Discord.OverwriteResolvable[] = []; // SuiS added
 
         switch (this.phase) {
             case Phase.p0_UnStarted:
@@ -590,10 +591,12 @@ export default class GameState {
                 addPerm(this.guild.id, Perm.ReadOnly, permDead       );
                 addPerm(this.guild.id, Perm.RW,       permDeadVoice  );
                 addPerm(this.guild.id, Perm.ViewOnly, permWerewolf   );
+                addPerm(this.guild.id, Perm.ViewOnly, permWerewolfVoice   ); // SuiS added
                 break;
             case Phase.p2_Preparation:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -605,33 +608,39 @@ export default class GameState {
                     addPerm(uid, Perm.ViewOnly, permDeadVoice  );
                     if(this.members[uid].allowWolfRoom){
                         addPerm(uid, Perm.ReadOnly, permWerewolf);
+                        addPerm(uid, Perm.ReadOnly, permWerewolfVoice); // SuiS added
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
             case Phase.p3_FirstNight:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
-                addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
+                addPerm(this.guild.id, Perm.NoAccess, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
                 addPerm(this.guild.id, Perm.ViewOnly, permDeadVoice  );
                 for(const uid in this.members) {
                     addPerm(uid, Perm.ReadOnly, permLiving);
-                    addPerm(uid, Perm.ReadOnly, permLivingVoice);
+                    addPerm(uid, Perm.NoAccess, permLivingVoice);
                     addPerm(uid, Perm.NoAccess, permDead       );
                     addPerm(uid, Perm.ViewOnly, permDeadVoice  );
                     if(this.members[uid].allowWolfRoom){
                         addPerm(uid, Perm.RW,       permWerewolf);
+                        addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
             case Phase.p4_Daytime:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -652,17 +661,21 @@ export default class GameState {
                         const enableDaytimeWolfRoom = false;
                         if(enableDaytimeWolfRoom && this.members[uid].isLiving) {
                             addPerm(uid, Perm.RW,       permWerewolf);
+                            addPerm(uid, Perm.RW,       permWerewolfVoice); // SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.ViewOnly, permWerewolfVoice); // SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice); // SuiS added
                     }
                 }
                 break;
             case Phase.p5_Vote:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
                 addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
@@ -687,47 +700,55 @@ export default class GameState {
                     if(this.members[uid].allowWolfRoom){
                         if(this.members[uid].isLiving) {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.ReadOnly, permWerewolfVoice);// SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.ViewOnly, permWerewolfVoice);// SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolfVoice);// SuiS added
                     }
                 }
                 break;
             case Phase.p6_Night:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.NoAccess, permWerewolf   );
+                addPerm(this.guild.id, Perm.NoAccess, permWerewolfVoice   ); // SuiS added
                 addPerm(this.guild.id, Perm.ReadOnly, permLiving     );
-                addPerm(this.guild.id, Perm.ReadOnly, permLivingVoice);
+                addPerm(this.guild.id, Perm.NoAccess, permLivingVoice);
                 addPerm(this.guild.id, Perm.NoAccess, permDead       );
                 addPerm(this.guild.id, Perm.ViewOnly, permDeadVoice  );
                 for(const uid in this.members) {
                     if(this.members[uid].isLiving) {
                         addPerm(uid, Perm.ReadOnly, permLiving);
-                        addPerm(uid, Perm.ReadOnly, permLivingVoice);
+                        addPerm(uid, Perm.NoAccess, permLivingVoice);
                         addPerm(uid, Perm.NoAccess, permDead       );
-                        addPerm(uid, Perm.ViewOnly, permDeadVoice  );
+                        addPerm(uid, Perm.NoAccess, permDeadVoice  );
                     } else {
                         addPerm(uid, Perm.ReadOnly, permLiving);
-                        addPerm(uid, Perm.ReadOnly, permLivingVoice);
+                        addPerm(uid, Perm.NoAccess, permLivingVoice);
                         addPerm(uid, Perm.RW,       permDead       );
                         addPerm(uid, Perm.RW,       permDeadVoice  );
                     }
                     if(this.members[uid].allowWolfRoom){
                         if(this.members[uid].isLiving) {
                             addPerm(uid, Perm.RW,       permWerewolf);
+                            addPerm(uid, Perm.RW,       permWerewolfVoice);  // SuiS added
                         } else {
                             addPerm(uid, Perm.ReadOnly, permWerewolf);
+                            addPerm(uid, Perm.NoAccess, permWerewolfVoice);  // SuiS added
                         }
                     } else {
                         addPerm(uid, Perm.NoAccess, permWerewolf);
+                        addPerm(uid, Perm.NoAccess, permWerewolf);  // SuiS added
                     }
                 }
                 break;
             case Phase.p7_GameEnd:
                 // for @everyone(Guest)
                 addPerm(this.guild.id, Perm.ReadOnly, permWerewolf   );
+                addPerm(this.guild.id, Perm.ViewOnly, permWerewolfVoice   );
                 addPerm(this.guild.id, Perm.RW,       permLiving     );
                 addPerm(this.guild.id, Perm.RW,       permLivingVoice);
                 addPerm(this.guild.id, Perm.ReadOnly, permDead       );
@@ -742,95 +763,135 @@ export default class GameState {
             addPerm(this.guild.me.id, Perm.Admin, permDead       );
             addPerm(this.guild.me.id, Perm.Admin, permDeadVoice  );
             addPerm(this.guild.me.id, Perm.Admin, permWerewolf   );
+            addPerm(this.guild.me.id, Perm.Admin, permWerewolfVoice   );
         }
         this.channels.Living     .permissionOverwrites.set(permLiving     );
         this.channels.LivingVoice.permissionOverwrites.set(permLivingVoice);
         this.channels.Dead       .permissionOverwrites.set(permDead       );
         this.channels.DeadVoice  .permissionOverwrites.set(permDeadVoice  );
         this.channels.Werewolf   .permissionOverwrites.set(permWerewolf   );
+        this.channels.WolfVoice  .permissionOverwrites.set(permWerewolfVoice   );
 
+
+        // TO DO SUIS Wolf mute ?
         const LiveID = this.channels.LivingVoice.id;
         const DeadID = this.channels.DeadVoice.id;
-        for(const uid in this.members) {
-            const m_old = this.members[uid].member;
-            if(m_old == null) continue;
-            m_old.fetch().then(m => {
-                if(m.voice.channel == null) {
-                    m.voice;
-                    return;
-                }
-                let Li = permLivingVoice.findIndex(a => a.id == uid);
-                let Di = permDeadVoice.findIndex(a => a.id == uid);
-                if(Li < 0) Li = permLivingVoice.findIndex(a => a.id == this.guild.id);
-                if(Di < 0) Di = permDeadVoice.findIndex(a => a.id == this.guild.id);
-                if(Li < 0) this.err();
-                if(Di < 0) this.err();
-                if(m.voice.channel.id == LiveID){
+        const WolfID = this.channels.WolfVoice.id;
+        // 以下の処理でlivingとdeadのボイスチャンネルの移動とミュートを制御
+        /////   SuiS added  //////
+        if(this.phase == Phase.p6_Night || this.phase == Phase.p3_FirstNight ){ //SuiS added
+            for(const uid in this.members) {
+                const m_old = this.members[uid].member;
+                if(m_old == null) continue;
+                m_old.fetch().then(m => {
+                    if(m.voice.channel == null) {
+                        m.voice;
+                        return;
+                    }
+                    if(cu1 != null && m.id == cu1.id) return;
+                    if(cu2 != null && m.id == cu2.id) return;
+                    if(m.voice.channel.id == LiveID){
+                        if(this.members[uid].allowWolfRoom){
+                            if(this.members[uid].isLiving) {
+                                m.voice.setChannel(WolfID); // これで切断
+                                m.voice.setMute(false);
+                            } else {
+                                m.voice.setMute(false);
+                                m.voice.setChannel(null); // これで切断
+                            }
+                        } else {
+                            m.voice.setMute(false);
+                            m.voice.setChannel(null); // これで切断
+                        }
+                    }
+                })
+            }
+        } 
+        //////////////////////////
+        else{
+            for(const uid in this.members) {
+                const m_old = this.members[uid].member;
+                if(m_old == null) continue;
+                m_old.fetch().then(m => {
+                    if(m.voice.channel == null) {
+                        m.voice;
+                        return;
+                    }
+                    let Li = permLivingVoice.findIndex(a => a.id == uid);
+                    let Di = permDeadVoice.findIndex(a => a.id == uid);
+                    if(Li < 0) Li = permLivingVoice.findIndex(a => a.id == this.guild.id);
+                    if(Di < 0) Di = permDeadVoice.findIndex(a => a.id == this.guild.id);
+                    if(Li < 0) this.err();
+                    if(Di < 0) this.err();
+                    if(m.voice.channel.id == LiveID){
+                        const allowL = permLivingVoice[Li].allow;
+                        if(allowL == RW_alw){
+                            m.voice.setMute(false);
+                        } else {
+                            const allowD = permDeadVoice[Di].allow;
+                            if(allowD == null) return;
+                            if(allowD == RW_alw){
+                                m.voice.setChannel(DeadID);
+                                m.voice.setMute(false);
+                            } else {
+                                m.voice.setMute(true);
+                            }
+                        }
+                    } else if(m.voice.channel.id == DeadID){
+                        const allowD = permDeadVoice[Di].allow;
+                        if(allowD == RW_alw){
+                            m.voice.setMute(false);
+                        } else  {
+                            const allowL = permLivingVoice[Li].allow;
+                            if(allowL == null) return;
+                            if(allowL == RW_alw){
+                                m.voice.setChannel(LiveID);
+                                m.voice.setMute(false);
+                            } else {
+                                m.voice.setMute(true);
+                            }
+                        }
+                    } else {
+                        m.voice.setMute(false);
+                    }
+                });
+            }
+            this.channels.LivingVoice.fetch().then(v => {
+                v.members.forEach(m => {
+                    if(m.id in this.members) return;
+                    if(cu1 != null && m.id == cu1.id) return;
+                    if(cu2 != null && m.id == cu2.id) return;
+                    const Li = permLivingVoice.findIndex(a => a.id == this.guild.id);
+                    if(Li < 0) this.err();
                     const allowL = permLivingVoice[Li].allow;
                     if(allowL == RW_alw){
                         m.voice.setMute(false);
                     } else {
-                        const allowD = permDeadVoice[Di].allow;
-                        if(allowD == null) return;
-                        if(allowD == RW_alw){
-                            m.voice.setChannel(DeadID);
-                            m.voice.setMute(false);
-                        } else {
-                            m.voice.setMute(true);
-                        }
+                        m.voice.setChannel(LiveID);
                     }
-                } else if(m.voice.channel.id == DeadID){
+                })
+            })
+            this.channels.DeadVoice.fetch().then(v => {
+                v.members.forEach(m => {
+                    if(m.id in this.members) return;
+                    if(cu1 != null && m.id == cu1.id) return;
+                    if(cu2 != null && m.id == cu2.id) return;
+                    const Di = permDeadVoice.findIndex(a => a.id == this.guild.id);
+                    if(Di < 0) this.err();
                     const allowD = permDeadVoice[Di].allow;
                     if(allowD == RW_alw){
                         m.voice.setMute(false);
-                    } else  {
-                        const allowL = permLivingVoice[Li].allow;
-                        if(allowL == null) return;
-                        if(allowL == RW_alw){
-                            m.voice.setChannel(LiveID);
-                            m.voice.setMute(false);
-                        } else {
-                            m.voice.setMute(true);
-                        }
+                    } else if(allowD == ReadOnly_alw){
+                        m.voice.setMute(false);
+                    } else {
+                        m.voice.disconnect();
                     }
-                } else {
-                    m.voice.setMute(false);
-                }
-            });
+                })
+            })
         }
-        this.channels.LivingVoice.fetch().then(v => {
-            v.members.forEach(m => {
-                if(m.id in this.members) return;
-                if(cu1 != null && m.id == cu1.id) return;
-                if(cu2 != null && m.id == cu2.id) return;
-                const Li = permLivingVoice.findIndex(a => a.id == this.guild.id);
-                if(Li < 0) this.err();
-                const allowL = permLivingVoice[Li].allow;
-                if(allowL == RW_alw){
-                    m.voice.setMute(false);
-                } else {
-                    m.voice.setChannel(LiveID);
-                }
-            })
-        })
-        this.channels.DeadVoice.fetch().then(v => {
-            v.members.forEach(m => {
-                if(m.id in this.members) return;
-                if(cu1 != null && m.id == cu1.id) return;
-                if(cu2 != null && m.id == cu2.id) return;
-                const Di = permDeadVoice.findIndex(a => a.id == this.guild.id);
-                if(Di < 0) this.err();
-                const allowD = permDeadVoice[Di].allow;
-                if(allowD == RW_alw){
-                    m.voice.setMute(false);
-                } else if(allowD == ReadOnly_alw){
-                    m.voice.setMute(false);
-                } else {
-                    m.voice.disconnect();
-                }
-            })
-        })
-    }    
+    }
+
+
     resetReactedMember(){
         this.reactedMember = Object.create(null);
     }

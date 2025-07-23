@@ -8,3 +8,4 @@ media
 
 server_settings
 !server_settings/default.json5
+.env
