@@ -959,6 +959,7 @@ export default class GameState {
                 // 妖狐に占われたことと死んだことをチャット
                 
                 // 妖狐をDeadへ
+                this.killNext.push([tid, 0]);
                 this.kickMember(tid, KickReason.Kyubi).then();;
             }
         }
@@ -1725,7 +1726,23 @@ export default class GameState {
             });
             this.channels.Living.send({embeds: [embed]});
             this.channels.GameLog.send({embeds: [embed]});
-        } else if(this.killNext.length === 0){
+        } else if (this.killNext.length > 1) {
+            this.killNext.forEach(p => {
+                const uid = p[0];
+                const uname = this.members[uid].nickname;
+                const thumb = this.members[uid].user.displayAvatarURL();
+                const embed = new Discord.MessageEmbed({
+                    author    : {name: format(this.langTxt.p4.day_number, {n : this.dayNumber})},
+                    title     : format(this.langTxt.p4.killed_morning, {user : uname}),
+                    color     : this.langTxt.sys.killed_color,
+                    thumbnail : {url: thumb},
+                    fields    : [{name : format(this.langTxt.p4.living_and_num, {n : living_num}), value: living, inline : true}]
+                });
+                this.channels.Living.send({embeds: [embed]});
+                this.channels.GameLog.send({embeds: [embed]});  
+            })
+        } 
+        else if(this.killNext.length === 0){
             const embed = new Discord.MessageEmbed({
                 author    : {name: format(this.langTxt.p4.day_number, {n : this.dayNumber})},
                 title     : this.langTxt.p4.no_killed_morning,
@@ -2465,7 +2482,6 @@ export default class GameState {
             Guarded.push(this.members[uid].voteTo);
         }
         Object.keys(this.members);
-        this.killNext = [];
 
         if(this.wolfVote == ""){
             if(this.wolfValidTo.length == 0) this.err();
