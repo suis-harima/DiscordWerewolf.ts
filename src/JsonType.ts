@@ -209,12 +209,14 @@ export const LangTypeFormat = obj({
         Good  : str,
         Evil  : str,
         Other : str,
+        Kyubi  : str,
     }),
     team_emo
     :obj({
         Good    : str,
         Evil    : str,
         Other   : str,
+        Kyubi   : str,
         White   : str,
         Black   : str,
         Unknown : str,
@@ -224,12 +226,14 @@ export const LangTypeFormat = obj({
         Good  : str,
         Evil  : str,
         Other : str,
+        Kyubi : str,
     }),
     team_color
     :obj({
         Good  : num,
         Evil  : num,
         Other : num,
+        Kyubi : num,
     }),
 
     react
