@@ -960,7 +960,6 @@ export default class GameState {
                 
                 // 妖狐をDeadへ
                 this.killNext.push([tid, 0]);
-                this.kickMember(tid, KickReason.Kyubi).then();;
             }
         }
     }
@@ -1671,7 +1670,7 @@ export default class GameState {
                         if(tid == my_id) return false;
                         const tRole = this.members[tid].role;
                         if(tRole == null) return this.err();
-                        return whatTeamFortuneResult(tRole) != TeamNames.Evil;
+                        return (whatTeamFortuneResult(tRole) != TeamNames.Evil && getDefaultTeams(tRole) != TeamNames.Kyubi);
                     })
                     uch.send(getUserMentionStrFromId(my_id) + this.langTxt.p3.random_white_fortune);
                     if(ulist.length == 0){
@@ -2467,6 +2466,13 @@ export default class GameState {
         this.interactControllers[InteractType.Seer]     = Object.create(null);
         this.interactControllers[InteractType.Werewolf] = Object.create(null);
         this.interactControllers[InteractType.CutTime] = Object.create(null);
+
+        // 妖狐が占われてたら死ぬ処理
+        if ( this.killNext.length > 0 ) {
+            if (this.members[this.killNext[0][0]].role == Role.Kyubi){
+                this.kickMember(this.killNext[0][0], KickReason.Kyubi).then();
+            }
+        }
 
         let Guarded : string[] = [];
         for(const uid in this.members){
