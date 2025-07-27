@@ -2470,7 +2470,7 @@ export default class GameState {
         // 妖狐が占われてたら死ぬ処理
         if ( this.killNext.length > 0 ) {
             if (this.members[this.killNext[0][0]].role == Role.Kyubi){
-                this.kickMember(this.killNext[0][0], KickReason.Kyubi).then();
+                await this.kickMember(this.killNext[0][0], KickReason.Kyubi);
             }
         }
 
