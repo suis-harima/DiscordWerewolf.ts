@@ -127,7 +127,8 @@
         Dictator  : "独裁者",
         Baker     : "パン屋",
         Communicatable : "ささやく狂人",
-        Fanatic : "狂信者"
+        Fanatic : "狂信者",
+        Kyubi : "妖狐",
     },
     emo : {
         Villager  : ":man:",
@@ -140,7 +141,8 @@
         Dictator  : ":triumph:",
         Baker     : ":bread:",
         Communicatable : ":genie:",
-        Fanatic : ":vampire:"
+        Fanatic : ":vampire:",
+        Kyubi : ":fox:",
     },
     // https://twemoji.maxcdn.com/2/test/preview.html
     role_img : {
@@ -155,6 +157,8 @@
         Baker          : "https://twemoji.maxcdn.com/v/12.1.5/72x72/1f35e.png",
         Communicatable : "https://twemoji.maxcdn.com/v/12.1.5/72x72/1f9de-200d-2642-fe0f.png",
         Fanatic        : "https://cdn.jsdelivr.net/gh/twitter/twemoji@v12.1.5/assets/72x72/1f9db.png",
+        Kyubi          : "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f98a.png",
+
     },
     role_uni : {
         Villager       : "👨",
@@ -168,6 +172,7 @@
         Baker          : "🍞",
         Communicatable : "🧞",
         Fanatic        : "🧛",
+        Kyubi          : "🦊",
     },
     role_descs : {
         Villager       : "なんの能力も持たないただの人です．",
@@ -180,18 +185,21 @@
         Dictator       : "1度だけ昼の議論を即刻中止し，自分1人だけで処刑者を決定することが出来ます．",
         Baker          : "生存している限り，朝にパンを配達します．",
         Communicatable : "人狼チャットで人狼とコミュニケーションすることが出来ます．",
-        Fanatic        : "誰が人狼か知っています。人狼は誰が狂信者か分かりません．",
+        Fanatic        : "誰が人狼か知っています．人狼は誰が狂信者か分かりません．",
+        Kyubi          : "人狼に攻撃されても死なず，占われると死にます．ゲーム終了時に残っていたら勝ちです．",
     },
 
     team_name : {
         Good  : "村人陣営",
         Evil  : "人狼陣営",
-        Other : "その他陣営"
+        Other : "その他陣営",
+        Kyubi : "妖狐陣営",
     },
     team_emo : {
         Good  : ":man:",
         Evil  : ":wolf:",
         Other : ":fox:",
+        Kyubi : ":fox:",
         White : ":flag_white:",
         Black : ":flag_black:",
         Unknown : ":question:",
@@ -200,11 +208,13 @@
         Good       : "https://twemoji.maxcdn.com/v/12.1.5/72x72/1f468-1f3fc.png",
         Evil       : "https://twemoji.maxcdn.com/v/12.1.5/72x72/1f43a.png",
         Other      : "",
+        Kyubi      : "",
     },
     team_color : {
         Good  : 0xfbf9f0, // 白
         Evil  : 0x2b2000, // 黒
         Other : 0xf7fa37, // 黄
+        Kyubi : 0xf7fa37, // 黄
     },
 
     react : {

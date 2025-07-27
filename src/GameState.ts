@@ -29,6 +29,7 @@ const Role = stringToEnum([
     'Baker',
     'Communicatable',
     'Fanatic',
+    'Kyubi', // SuiS added
 ]);
 type Role = keyof typeof RolesStr.tsType;
 
@@ -36,7 +37,8 @@ type Role = keyof typeof RolesStr.tsType;
 const TeamNames = stringToEnum([
     'Good',
     'Evil',
-    'Other'
+    'Other',
+    'Kyubi'
 ]);
 type TeamNames = keyof typeof TeamNames;
 
@@ -55,6 +57,8 @@ function getDefaultTeams(r : Role){
         case Role.Communicatable:
         case Role.Fanatic:
             return TeamNames.Evil;
+        case Role.Kyubi: // SuiS added
+            return TeamNames.Kyubi;
         default:
             assertUnreachable(r);
     }
@@ -71,6 +75,7 @@ function whatTeamFortuneResult(r : Role){
         case Role.Traitor:
         case Role.Communicatable:
         case Role.Fanatic:
+        case Role.Kyubi: // SuiS added
             return TeamNames.Good;
         case Role.Werewolf:
             return TeamNames.Evil;
@@ -224,6 +229,7 @@ export enum KickReason {
     Vote,
     Werewolf,
     Living,
+    Kyubi,
 }
 
 
@@ -435,6 +441,8 @@ export default class GameState {
             if(s[i] == 'T') this.addRole(Role.Traitor);
             if(s[i] == 'C') this.addRole(Role.Communicatable);
             if(s[i] == 'F') this.addRole(Role.Fanatic);
+
+            if(s[i] == '9') this.addRole(Role.Kyubi); // SuiS added
         }
         console.log(this.defaultRoles);
         this.sendWantNums(this.channels.Living);
@@ -484,6 +492,11 @@ export default class GameState {
             name : this.langTxt.team_name.Other + "  " +
             format(this.langTxt.sys.Current_role_breakdown_sum, {num : team_cnt[TeamNames.Other]}),
             value: team[TeamNames.Other], inline : true});
+        }
+        if(team[TeamNames.Kyubi] != "") { fields.push({
+            name : this.langTxt.team_name.Kyubi + "  " +
+            format(this.langTxt.sys.Current_role_breakdown_sum, {num : team_cnt[TeamNames.Kyubi]}),
+            value: team[TeamNames.Kyubi], inline : true});
         }
         fields.push({
             name : this.langTxt.rule.title,
@@ -940,8 +953,17 @@ export default class GameState {
                         {name : LangFP.log,    value : actionLog, inline : true}]
                 }]});
             }
+
+            // 妖狐が占われていた場合妖狐が死ぬ処理
+            if (this.members[uid].role == Role.Seer && tRole == Role.Kyubi) {
+                // 妖狐に占われたことと死んだことをチャット
+                
+                // 妖狐をDeadへ
+                this.killNext.push([tid, 0]);
+            }
         }
     }
+
     getTimeFormatFromSec(t : number){
         const m = Math.floor(t / 60);
         const s = Math.floor(t - m * 60);
@@ -968,12 +990,17 @@ export default class GameState {
 
         let goodNum = 0;
         let evilNum = 0;
+        let isAliveKyubi = false;
 
         this.members[uid].deadReason = reason;
         if(reason == KickReason.Vote){
             this.httpGameState.updateMemberDead(uid);
         }
         if(reason == KickReason.Werewolf){
+            this.httpGameState.updateMemberKill(uid);
+        }
+        // 妖狐のkickを追加
+        if(reason == KickReason.Kyubi){
             this.httpGameState.updateMemberKill(uid);
         }
         for(let id in this.members){
@@ -985,13 +1012,24 @@ export default class GameState {
             } else {
                 goodNum += 1;
             }
+            if(r == Role.Kyubi) {
+                isAliveKyubi = true;
+            }
         }
-        if(goodNum <= evilNum){
-            this.gameEnd(TeamNames.Evil);
+        if(goodNum <= evilNum ){
+            if ( isAliveKyubi ) {
+                this.gameEnd(TeamNames.Kyubi);
+            } else {
+                this.gameEnd(TeamNames.Evil);
+            }
             return;
         }
         if(evilNum == 0){
-            this.gameEnd(TeamNames.Good);
+            if ( isAliveKyubi ) {
+                this.gameEnd(TeamNames.Kyubi);
+            } else {
+                this.gameEnd(TeamNames.Good);
+            }
             return;
         }
 
@@ -1632,7 +1670,7 @@ export default class GameState {
                         if(tid == my_id) return false;
                         const tRole = this.members[tid].role;
                         if(tRole == null) return this.err();
-                        return whatTeamFortuneResult(tRole) != TeamNames.Evil;
+                        return (whatTeamFortuneResult(tRole) != TeamNames.Evil && getDefaultTeams(tRole) != TeamNames.Kyubi);
                     })
                     uch.send(getUserMentionStrFromId(my_id) + this.langTxt.p3.random_white_fortune);
                     if(ulist.length == 0){
@@ -1687,7 +1725,23 @@ export default class GameState {
             });
             this.channels.Living.send({embeds: [embed]});
             this.channels.GameLog.send({embeds: [embed]});
-        } else if(this.killNext.length === 0){
+        } else if (this.killNext.length > 1) {
+            this.killNext.forEach(p => {
+                const uid = p[0];
+                const uname = this.members[uid].nickname;
+                const thumb = this.members[uid].user.displayAvatarURL();
+                const embed = new Discord.MessageEmbed({
+                    author    : {name: format(this.langTxt.p4.day_number, {n : this.dayNumber})},
+                    title     : format(this.langTxt.p4.killed_morning, {user : uname}),
+                    color     : this.langTxt.sys.killed_color,
+                    thumbnail : {url: thumb},
+                    fields    : [{name : format(this.langTxt.p4.living_and_num, {n : living_num}), value: living, inline : true}]
+                });
+                this.channels.Living.send({embeds: [embed]});
+                this.channels.GameLog.send({embeds: [embed]});  
+            })
+        } 
+        else if(this.killNext.length === 0){
             const embed = new Discord.MessageEmbed({
                 author    : {name: format(this.langTxt.p4.day_number, {n : this.dayNumber})},
                 title     : this.langTxt.p4.no_killed_morning,
@@ -2413,6 +2467,13 @@ export default class GameState {
         this.interactControllers[InteractType.Werewolf] = Object.create(null);
         this.interactControllers[InteractType.CutTime] = Object.create(null);
 
+        // 妖狐が占われてたら死ぬ処理
+        if ( this.killNext.length > 0 ) {
+            if (this.members[this.killNext[0][0]].role == Role.Kyubi){
+                await this.kickMember(this.killNext[0][0], KickReason.Kyubi);
+            }
+        }
+
         let Guarded : string[] = [];
         for(const uid in this.members){
             if(this.members[uid].role != Role.Knight) continue;
@@ -2427,7 +2488,6 @@ export default class GameState {
             Guarded.push(this.members[uid].voteTo);
         }
         Object.keys(this.members);
-        this.killNext = [];
 
         if(this.wolfVote == ""){
             if(this.wolfValidTo.length == 0) this.err();
@@ -2437,9 +2497,12 @@ export default class GameState {
 
         this.wolfLog.push(this.wolfVote);
         if(Guarded.find(id => id == this.wolfVote) == null){
-            this.killNext.push([this.wolfVote, 0]);
-            await this.kickMember(this.wolfVote, KickReason.Werewolf);
-            if(this.phase != Phase.p6_Night) return;
+            // Kyubiの場合を除く SuiS added
+            if (this.members[this.wolfVote].role != Role.Kyubi){
+                this.killNext.push([this.wolfVote, 0]);
+                await this.kickMember(this.wolfVote, KickReason.Werewolf);
+                if(this.phase != Phase.p6_Night) return;
+            }
         }
         await this.startP4_Daytime();
     }
